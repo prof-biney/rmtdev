@@ -1,4 +1,8 @@
+import { useState } from "react";
+
 export default function SearchForm() {
+  const [searchText, setSearchText] = useState("");
+
   return (
     <form
       onSubmit={(e) => {
@@ -12,6 +16,10 @@ export default function SearchForm() {
       </button>
 
       <input
+        onChange={(e) => {
+          setSearchText(e.target.value);
+        }}
+        value={searchText}
         spellCheck="false"
         type="text"
         required
