@@ -10,6 +10,10 @@ type JobItemApiResponse = {
 
 const fetchJobItem = async (id: number | null): Promise<JobItemApiResponse> => {
   const res = await fetch(`${BASE_API_URL}/${id}`);
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.description);
+  }
   const data = await res.json();
   return data;
 };
@@ -17,39 +21,55 @@ const fetchJobItem = async (id: number | null): Promise<JobItemApiResponse> => {
 export function useJobItem(id: number | null) {
   const { isLoading, data } = useQuery({
     queryKey: ["job-item", id],
-    queryFn: () => (id ? fetchJobItem(id) : null),
+    queryFn: () => {
+      try {
+        return id ? fetchJobItem(id) : null;
+      } catch (error) {
+        console.error(error);
+      }
+    },
     staleTime: 1000 * 60 * 60,
     enabled: Boolean(id),
     refetchOnWindowFocus: false,
     retry: false,
   });
 
-  const jobItem = data?.jobItem;
-  return { jobItem, isLoading } as const;
+  return {
+    jobItem: data?.jobItem,
+    isLoading,
+  } as const;
 }
 
+// ---------------------------------------------
+
+type JobItemsApiResponse = {
+  public: boolean;
+  sorted: boolean;
+  jobItems: JobItem[];
+};
+
+const fetchJobItems = async (
+  searchText: string
+): Promise<JobItemsApiResponse> => {
+  const res = await fetch(`${BASE_API_URL}?search=${searchText}`);
+  const data = await res.json();
+  return data;
+};
+
 export function useJobItems(searchText: string) {
-  const [jobItems, setJobItems] = useState<JobItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { data, isLoading } = useQuery({
+    queryKey: ["job-items", searchText],
+    queryFn: () => fetchJobItems(searchText),
+    staleTime: 1000 * 60 * 60,
+    retry: false,
+    refetchOnWindowFocus: false,
+    enabled: Boolean(searchText),
+  });
 
-  const totalResults = jobItems.length;
-  const jobItemsSliced = jobItems.slice(0, 7);
-
-  useEffect(() => {
-    if (!searchText) return;
-
-    const fetchData = async function () {
-      setIsLoading(true);
-      const res = await fetch(`${BASE_API_URL}?search=${searchText}`);
-      const data = await res.json();
-      setIsLoading(false);
-      setJobItems(data.jobItems);
-    };
-
-    fetchData();
-  }, [searchText]);
-
-  return { jobItemsSliced, isLoading, totalResults } as const;
+  return {
+    jobItems: data?.jobItems,
+    isLoading,
+  } as const;
 }
 
 export function useActiveID() {
