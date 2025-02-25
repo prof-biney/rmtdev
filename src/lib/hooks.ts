@@ -12,6 +12,7 @@ export function useJobItem(id: number | null) {
       const response = await fetch(`${BASE_API_URL}/${id}`);
       const data = await response.json();
       setJobItem(data.jobItem);
+      console.log(data.jobItem);
     };
 
     fetchData();
