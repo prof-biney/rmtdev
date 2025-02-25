@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { JobItem } from "./types";
+import { JobItem, JobItemExpanded } from "./types";
 import { BASE_API_URL } from "./constants";
 
 export function useJobItem(id: number | null) {
-  const [jobItem, setJobItem] = useState(null);
+  const [jobItem, setJobItem] = useState<JobItemExpanded | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -12,7 +12,6 @@ export function useJobItem(id: number | null) {
       const response = await fetch(`${BASE_API_URL}/${id}`);
       const data = await response.json();
       setJobItem(data.jobItem);
-      console.log(data.jobItem);
     };
 
     fetchData();
