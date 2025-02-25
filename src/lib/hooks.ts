@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { JobItem, JobItemExpanded } from "./types";
+import { JobItem } from "./types";
 import { BASE_API_URL } from "./constants";
+import { useQuery } from "@tanstack/react-query";
 
 export function useActiveID() {
   const [activeID, setActiveID] = useState<number | null>(null);
@@ -24,24 +25,56 @@ export function useActiveID() {
 }
 
 export function useJobItem(id: number | null) {
-  const [jobItem, setJobItem] = useState<JobItemExpanded | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, data } = useQuery({
+    queryKey: ["job-item", id],
+    queryFn: async () => {
+      const res = await fetch(`${BASE_API_URL}/${id}`);
+      const data = await res.json();
+      return data;
+    },
+    staleTime: 1000 * 60 * 60,
+    enabled: Boolean(id),
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
 
-  useEffect(() => {
-    if (!id) return;
-
-    const fetchData = async function () {
-      setIsLoading(true);
-      const response = await fetch(`${BASE_API_URL}/${id}`);
-      const data = await response.json();
-      setIsLoading(false);
-      setJobItem(data.jobItem);
-    };
-
-    fetchData();
-  }, [id]);
-
+  const jobItem = data.jobItem;
   return { jobItem, isLoading } as const;
+
+  // const { data, isLoading } = useQuery(
+  //   ["job-item", id],
+  //   async () => {
+  //     const response = await fetch(`C);
+  //     const data = await response.json();
+  //     return data;
+  //   },
+  //   {
+  //     staleTime: 1000 * 60 * 60,
+  //     refetchOnWindowFocus: false,
+  //     retry: false,
+  //     enabled: Boolean(id),
+
+  //   }
+  // );
+
+  // const [jobItem, setJobItem] = useState<JobItemExpanded | null>(null);
+  // const [isLoading, setIsLoading] = useState(false);
+
+  // useEffect(() => {
+  //   if (!id) return;
+
+  //   const fetchData = async function () {
+  //     setIsLoading(true);
+  //     const response = await fetch(`${BASE_API_URL}/${id}`);
+  //     const data = await response.json();
+  //     setIsLoading(false);
+  //     setJobItem(data.jobItem);
+  //   };
+
+  //   fetchData();
+  // }, [id]);
+
+  // return { jobItem, isLoading } as const;
 }
 
 export function useJobItems(searchText: string) {
