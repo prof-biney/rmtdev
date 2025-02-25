@@ -1,3 +1,11 @@
-export default function ResultsCount() {
-  return <p className="count">0 results</p>;
+type ResultsCountProps = {
+  totalResults: number;
+};
+
+export default function ResultsCount({ totalResults }: ResultsCountProps) {
+  return (
+    <p className="count">
+      <span className="u-bold">{totalResults}</span> results
+    </p>
+  );
 }
