@@ -23,7 +23,9 @@ export function useJobItem(id: number | null) {
     queryKey: ["job-item", id],
     queryFn: () => {
       try {
-        return id ? fetchJobItem(id) : null;
+        const data = id ? fetchJobItem(id) : null;
+        console.log(data);
+        return data;
       } catch (error) {
         console.error(error);
       }
@@ -52,6 +54,10 @@ const fetchJobItems = async (
   searchText: string
 ): Promise<JobItemsApiResponse> => {
   const res = await fetch(`${BASE_API_URL}?search=${searchText}`);
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.description);
+  }
   const data = await res.json();
   return data;
 };
@@ -59,7 +65,15 @@ const fetchJobItems = async (
 export function useJobItems(searchText: string) {
   const { data, isLoading } = useQuery({
     queryKey: ["job-items", searchText],
-    queryFn: () => fetchJobItems(searchText),
+    queryFn: async () => {
+      try {
+        const data = await fetchJobItems(searchText);
+        console.log(data);
+        return data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     staleTime: 1000 * 60 * 60,
     retry: false,
     refetchOnWindowFocus: false,
