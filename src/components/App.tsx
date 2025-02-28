@@ -25,7 +25,9 @@ function App() {
 
   // Derived / Computed state
   const totalResults = jobItems?.length || 0;
-  const jobItemsSliced = jobItems?.slice(0, 7) || [];
+  const totalPages = totalResults / 7;
+  const jobItemsSliced =
+    jobItems?.slice((currentPage - 1) * 7, currentPage * 7) || [];
 
   // Event handlers
   const handleChangePage = (direction: "next" | "previous") => {
@@ -60,6 +62,7 @@ function App() {
 
           <PaginationControls
             currentPage={currentPage}
+            totalPages={totalPages}
             onClick={handleChangePage}
           />
         </Sidebar>
