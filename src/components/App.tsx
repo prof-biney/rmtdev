@@ -15,6 +15,7 @@ import PaginationControls from "./PaginationControls";
 import { useDebounce, useJobItems } from "../lib/hooks";
 import { Toaster } from "react-hot-toast";
 import { RESULTS_PER_PAGE } from "../lib/constants";
+import { SortBy } from "../lib/types";
 
 function App() {
   // State
@@ -22,7 +23,7 @@ function App() {
   const debouncedSearchText = useDebounce(searchText, 500);
   const { jobItems, isLoading } = useJobItems(debouncedSearchText);
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState<"recent" | "relevant">("relevant");
+  const [sortBy, setSortBy] = useState<SortBy>("relevant");
 
   // Derived / Computed state
   const totalResults = jobItems?.length || 0;
@@ -49,7 +50,7 @@ function App() {
     }
   };
 
-  const handleChangeSortBy = (newSortBy: "recent" | "relevant") => {
+  const handleChangeSortBy = (newSortBy: SortBy) => {
     setSortBy(newSortBy);
   };
 
