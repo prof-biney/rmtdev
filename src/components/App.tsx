@@ -22,13 +22,20 @@ function App() {
   const debouncedSearchText = useDebounce(searchText, 500);
   const { jobItems, isLoading } = useJobItems(debouncedSearchText);
   const [currentPage, setCurrentPage] = useState(1);
-  console.log(currentPage);
+  const [sortBy, setSortBy] = useState<"recent" | "relevant">("relevant");
 
   // Derived / Computed state
   const totalResults = jobItems?.length || 0;
   const totalPages = totalResults / RESULTS_PER_PAGE;
+  const jobItemsSorted = jobItems?.sort((a, b) => {
+    if (sortBy === "relevant") {
+      return b.relevanceScore - a.relevanceScore;
+    } else {
+      return a.daysAgo - b.daysAgo;
+    }
+  });
   const jobItemsSliced =
-    jobItems?.slice(
+    jobItemsSorted?.slice(
       (currentPage - 1) * RESULTS_PER_PAGE,
       currentPage * RESULTS_PER_PAGE
     ) || [];
@@ -40,6 +47,10 @@ function App() {
     } else if (direction === "previous") {
       setCurrentPage((prev) => prev - 1);
     }
+  };
+
+  const handleChangeSortBy = (newSortBy: "recent" | "relevant") => {
+    setSortBy(newSortBy);
   };
 
   return (
@@ -59,7 +70,7 @@ function App() {
         <Sidebar>
           <SidebarTop>
             <ResultsCount totalResults={totalResults} />
-            <SortingControls />
+            <SortingControls sortBy={sortBy} onClick={handleChangeSortBy} />
           </SidebarTop>
 
           <JobList jobItems={jobItemsSliced} isLoading={isLoading} />
