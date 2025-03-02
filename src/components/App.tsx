@@ -24,6 +24,7 @@ function App() {
   const { jobItems, isLoading } = useJobItems(debouncedSearchText);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState<SortBy>("relevant");
+  const [bookmarkedIds, setBookmarkedIds] = useState<number[]>([]);
 
   // Derived / Computed state
   const totalResults = jobItems?.length || 0;
@@ -42,6 +43,14 @@ function App() {
     ) || [];
 
   // Event handlers
+  const handleToggleBookmark = (id: number) => {
+    if (bookmarkedIds.includes(id)) {
+      setBookmarkedIds((prev) => prev.filter((item) => item !== id));
+    } else {
+      setBookmarkedIds((prev) => [...prev, id]);
+    }
+  };
+
   const handleChangePage = (direction: PageDirection) => {
     if (direction === "next") {
       setCurrentPage((prev) => prev + 1);
