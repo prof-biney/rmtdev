@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { createContext, useState } from "react";
+
+export const BookmarksContext = createContext(null);
 
 export default function BookmarksContextProvider({ children }) {
   const [bookmarkedIds, setBookmarkedIds] = useState<number[]>([]);
@@ -11,5 +13,14 @@ export default function BookmarksContextProvider({ children }) {
     }
   };
 
-  return <div>{children}</div>;
+  return (
+    <BookmarksContext.Provider
+      value={{
+        bookmarkedIds,
+        handleToggleBookmark,
+      }}
+    >
+      {children}
+    </BookmarksContext.Provider>
+  );
 }
