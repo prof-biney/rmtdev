@@ -25,7 +25,6 @@ export function useJobItem(id: number | null) {
     queryFn: () => {
       try {
         const data = id ? fetchJobItem(id) : null;
-        console.log(data);
         return data;
       } catch (error) {
         console.error(error);
