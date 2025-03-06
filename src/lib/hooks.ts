@@ -122,3 +122,15 @@ export function useDebounce<T>(value: T, delay = 500): T {
 
   return debouncedValue;
 }
+
+export function useLocalStorage<T>(key: string, initialValue: T) {
+  const [value, setValue] = useState<number[]>(() =>
+    JSON.parse(localStorage.getItem(key) || String(initialValue))
+  );
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue] as const;
+}
