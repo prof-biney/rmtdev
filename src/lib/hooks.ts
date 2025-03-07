@@ -63,7 +63,7 @@ const fetchJobItems = async (
   return data;
 };
 
-export function useJobItems(searchText: string) {
+export function useSearchQuery(searchText: string) {
   const { data, isLoading } = useQuery({
     queryKey: ["job-items", searchText],
     queryFn: async () => {
