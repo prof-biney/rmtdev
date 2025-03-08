@@ -45,6 +45,10 @@ export function useJobItem(id: number | null) {
 
 // ---------------------------------------------
 
+export function useJobItems() {}
+
+// ---------------------------------------------
+
 type JobItemsApiResponse = {
   public: boolean;
   sorted: boolean;
