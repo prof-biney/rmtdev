@@ -6,7 +6,6 @@ type BookmarksContext = {
   handleToggleBookmark: (id: number) => void;
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const BookmarksContext = createContext<BookmarksContext | null>(null);
 
 export default function BookmarksContextProvider({
