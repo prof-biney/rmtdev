@@ -55,7 +55,13 @@ export function useJobItems(ids: number[]) {
     })),
   });
 
-  console.log(results);
+  const jobItems = results
+    .map((result) => result.data?.jobItem)
+    .filter((jobItem) => jobItem !== undefined);
+
+  const isLoading = results.some((result) => result.isLoading);
+
+  return { jobItems, isLoading };
 }
 
 // ---------------------------------------------

@@ -1,9 +1,12 @@
 import { createContext } from "react";
 import { useJobItems, useLocalStorage } from "../lib/hooks";
+import { JobItem } from "../lib/types";
 
 type BookmarksContext = {
   bookmarkedIds: number[];
   handleToggleBookmark: (id: number) => void;
+  bookmarkedJobItems: JobItem[];
+  isLoading: boolean;
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -19,8 +22,8 @@ export default function BookmarksContextProvider({
     []
   );
 
-  // const { jobItems: bookmarkedJobItems, isLoading } =
-  useJobItems(bookmarkedIds);
+  const { jobItems: bookmarkedJobItems, isLoading } =
+    useJobItems(bookmarkedIds);
 
   const handleToggleBookmark = (id: number) => {
     if (bookmarkedIds.includes(id)) {
@@ -35,8 +38,8 @@ export default function BookmarksContextProvider({
       value={{
         bookmarkedIds,
         handleToggleBookmark,
-        // bookmarkedJobItems,
-        // isLoading,
+        bookmarkedJobItems,
+        isLoading,
       }}
     >
       {children}
