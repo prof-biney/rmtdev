@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { JobItem, JobItemExpanded } from "./types";
 import { BASE_API_URL } from "./constants";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { handleError } from "./utils";
 import { BookmarksContext } from "../contexts/BookmarksContextProvider";
 
@@ -43,9 +43,20 @@ export function useJobItem(id: number | null) {
   } as const;
 }
 
-// ---------------------------------------------
+export function useJobItems(ids: number[]) {
+  const results = useQueries({
+    queries: ids.map((id) => ({
+      queryKey: ["job-item", id],
+      queryFn: () => fetchJobItem(id),
+      staleTime: 1000 * 60 * 60,
+      enabled: Boolean(id),
+      refetchOnWindowFocus: false,
+      retry: false,
+    })),
+  });
 
-export function useJobItems() {}
+  console.log(results);
+}
 
 // ---------------------------------------------
 
