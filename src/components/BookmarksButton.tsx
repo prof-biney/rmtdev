@@ -12,9 +12,7 @@ export default function BookmarksButton() {
       if (
         e.target instanceof HTMLElement &&
         !buttonRef.current?.contains(e.target) &&
-        !popoverRef.current?.contains(e.target) &&
-        !e.target.closest(".bookmarks-btn") &&
-        !e.target.closest(".bookmarks-popover")
+        !popoverRef.current?.contains(e.target)
       ) {
         setIsOpen(false);
       }
