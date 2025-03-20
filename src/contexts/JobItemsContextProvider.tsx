@@ -7,6 +7,7 @@ type JobItemsContext = {
   jobItems: JobItem[] | undefined;
   jobItemsSliced: JobItem[];
   isLoading: boolean;
+  currentPage: number;
   totalPages: number;
   totalResults: number;
   sortBy: SortBy;
@@ -66,6 +67,7 @@ export default function JobItemsContextProvider({
         jobItems,
         jobItemsSliced,
         isLoading,
+        currentPage,
         totalPages,
         totalResults,
         sortBy,
