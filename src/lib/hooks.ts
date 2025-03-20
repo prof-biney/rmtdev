@@ -203,4 +203,6 @@ export function useActiveIDContext() {
       "useActiveIdContext must be used within ActiveIdContextProvider"
     );
   }
+
+  return context;
 }
