@@ -1,12 +1,12 @@
 import { createContext } from "react";
 import { useActiveID } from "../lib/hooks";
 
-type ActiveIdContext = {
+type ActiveIDContext = {
   activeID: number | null;
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const ActiveIdContext = createContext<ActiveIdContext | null>(null);
+export const ActiveIDContext = createContext<ActiveIDContext | null>(null);
 
 export default function ActiveIdContextProvider({
   children,
@@ -16,8 +16,8 @@ export default function ActiveIdContextProvider({
   const activeID = useActiveID();
 
   return (
-    <ActiveIdContext.Provider value={{ activeID }}>
+    <ActiveIDContext.Provider value={{ activeID }}>
       {children}
-    </ActiveIdContext.Provider>
+    </ActiveIDContext.Provider>
   );
 }
