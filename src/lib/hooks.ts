@@ -108,6 +108,8 @@ export function useSearchQuery(searchText: string) {
   } as const;
 }
 
+// ----------------------------------------------------
+
 export function useActiveID() {
   const [activeID, setActiveID] = useState<number | null>(null);
 
@@ -158,6 +160,27 @@ export function useLocalStorage<T>(
   }, [key, value]);
 
   return [value, setValue] as const;
+}
+
+export function useOnClickOutside(
+  refs: React.RefObject<
+    HTMLElement | HTMLButtonElement | HTMLDivElement | null
+  >[],
+  handler: () => void
+) {
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (refs.every((ref) => !ref.current?.contains(e.target as Node))) {
+        handler();
+      }
+    };
+
+    document.addEventListener("click", handleClick);
+
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, [refs, handler]);
 }
 
 // ---------------------------------------------------
