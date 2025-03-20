@@ -196,7 +196,7 @@ export function useBookmarksContext() {
   return context;
 }
 
-export function useActiveIdContext() {
+export function useActiveIDContext() {
   const context = useContext(ActiveIDContext);
   if (!context) {
     throw new Error(
