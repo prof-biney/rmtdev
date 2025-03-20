@@ -5,6 +5,7 @@ import { useQueries, useQuery } from "@tanstack/react-query";
 import { handleError } from "./utils";
 import { BookmarksContext } from "../contexts/BookmarksContextProvider";
 import { ActiveIDContext } from "../contexts/ActiveIDContextProvider";
+import { SearchTextContext } from "../contexts/SearchTextContextProvider";
 
 type JobItemApiResponse = {
   public: boolean;
@@ -201,6 +202,18 @@ export function useActiveIDContext() {
   if (!context) {
     throw new Error(
       "useActiveIdContext must be used within ActiveIdContextProvider"
+    );
+  }
+
+  return context;
+}
+
+export function useSearchTextContext() {
+  const context = useContext(SearchTextContext);
+
+  if (!context) {
+    throw new Error(
+      "useSearchTextContext must be used within SearchTextContextProvider"
     );
   }
 
